@@ -10,7 +10,8 @@ LC=1.99
 HC=4.99
 while [  $COUNTER -lt 5 ];
 	do
-	MYTIME=$((time dig $DOMAIN +trace q-type A) 2>&1| grep real | cut -dm -f 2 | sed -e 's/[s.]//g')
+	ts=$(date +%s%N) ; dig $DOMAIN  q-type A 2>&1| grep real | cut -dm -f 2 | sed -e 's/[s.]//g' ; MYTIME=$((($(date +%s%N) - $ts)/1000000))
+	#MYTIME=$((time dig $DOMAIN  q-type A) 2>&1| grep real | cut -dm -f 2 | sed -e 's/[s.]//g')
 	if [ $? -eq 0 ]; then
 		INTERFACE=$(/usr/sbin/route | grep default | awk '{print "interface:" $8}')
 		NETWORK=$(/usr/sbin/route | grep `/usr/sbin/route | grep default | awk '{print $8}'` | grep -v default | awk '{print $1}')
